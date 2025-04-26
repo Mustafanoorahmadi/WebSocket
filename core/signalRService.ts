@@ -1,16 +1,12 @@
 import * as signalR from "@microsoft/signalr";
+import { Location } from "@/providers/app.provider";
 
 export let connection: signalR.HubConnection | null = null;
 
-export interface Location {
-  lat: number,
-  lot: number
-}
-
 export const startSignalRConnection = async (
-  setProgress: (value: number) => void, 
+  setProgress: (value: number) => void,
   addLocation: (location: Location) => void
- ) => {
+) => {
   if (connection) return;
 
   connection = new signalR.HubConnectionBuilder()
@@ -38,12 +34,12 @@ export const startSignalRConnection = async (
 
   connection.on("ReceiveLocation", (message: any) => {
     try {
-      const location = message as Location
-      addLocation(location)
-    } catch {
-      
+      const location = message as Location;
+      addLocation(location);
+    } catch (error) {
+      console.error("Error parsing location message:", error);
     }
-  })
+  });
 };
 
 export const startProgress = async () => {
@@ -64,4 +60,4 @@ export const startTracking = async () => {
       console.log("SignalR send message error:" + err);
     }
   }
-}
+};

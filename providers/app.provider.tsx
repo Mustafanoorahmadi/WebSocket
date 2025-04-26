@@ -1,5 +1,9 @@
 "use client"
 import { createContext, useContext, useState } from "react";
+export interface Location {
+  lat: number;
+  lon: number;
+}
 
 interface AppType {
   progress: number;
